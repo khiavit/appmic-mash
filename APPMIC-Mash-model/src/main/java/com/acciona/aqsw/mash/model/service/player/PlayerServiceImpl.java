@@ -50,7 +50,6 @@ public class PlayerServiceImpl implements IPlayerService {
 			getPlayerWithNumber(player.getNumber());
 			throw new PlayerExistsConflictException(String.format("Imposible la creacion. El usuario con el nombre  %s, ya existe.", player.getName()));
 		} catch (PlayerNotFoundException e) {
-			player.setId(null);
 			final Player playerAdded = playerRepository.saveAndFlush(playerMapper.playerDtoToPlayer(player));
 			return playerMapper.playerToPlayerDto(playerAdded);
 		}

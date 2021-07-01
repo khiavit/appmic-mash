@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.acciona.aqsw.mash.api.dto.PlayerDTO;
 import com.acciona.aqsw.mash.api.exception.PlayerExistsConflictException;
+import com.acciona.aqsw.mash.api.exception.PlayerNotFoundException;
 
 public interface IPlayerService {
 
-	PlayerDTO getPlayerById(final long id);
+	PlayerDTO getPlayerById(final long id) throws PlayerNotFoundException;
 
 	PlayerDTO getPlayerWithNumber(final long number);
 
@@ -15,9 +16,9 @@ public interface IPlayerService {
 
 	void insert(final PlayerDTO player) throws PlayerExistsConflictException;
 
-	void update(final PlayerDTO player);
+	PlayerDTO update(final Long id, final PlayerDTO player);
 
-	void delete(final long id);
+	PlayerDTO delete(final long id) throws PlayerNotFoundException;
 
 	boolean isUserExist(final long id);
 

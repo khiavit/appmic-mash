@@ -18,7 +18,7 @@ public class PlayerDTO implements Serializable {
 	 */
 	private static final long serialVersionUID = 5877836792102357129L;
 
-	private Long idPlayer;
+	private Long id;
 
 	private String name;
 

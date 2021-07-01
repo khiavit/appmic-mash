@@ -20,7 +20,7 @@ public class Player {
 
 	@Id
 	@Column(name = "ID", nullable = false)
-	private Long idPlayer;
+	private Long id;
 
 	@Column(name = "NAME", nullable = false)
 	private String name;

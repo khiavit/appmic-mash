@@ -24,11 +24,13 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
 @RequestMapping(path = "/api/v1")
 @Api(value = "/api/v1", tags = "Operaciones con usuarios")
 @RequiredArgsConstructor
+@Log4j2
 public class PlayerController {
 
 	private final IPlayerService playerService;
@@ -52,8 +54,9 @@ public class PlayerController {
 	@ApiResponses({ @ApiResponse(code = 404, message = "No se encontro el resultado") })
 	@GetMapping(value = "/players/{id}", headers = "Accept=application/json")
 	public ResponseEntity<PlayerDTO> getUser(
-			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) @PathVariable("id") long id)
-			throws PlayerNotFoundException {
+			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) 
+			@PathVariable("id") long id)
+					throws PlayerNotFoundException {
 
 		final PlayerDTO player = playerService.getPlayerById(id);
 		return new ResponseEntity<>(player, HttpStatus.OK);
@@ -62,18 +65,21 @@ public class PlayerController {
 	@ApiOperation(value = "Alta de un usuario a partir de un id.", notes = "Insercion de un usuario en memoria.")
 	@ApiResponses({ @ApiResponse(code = 409, message = "El usuario ya existe") })
 	@PostMapping(value = "/players")
-	public ResponseEntity<PlayerDTO> createUser(@RequestBody PlayerDTO player) throws PlayerExistsConflictException {
+	public ResponseEntity<PlayerDTO> createUser(@RequestBody PlayerDTO player) 
+			throws PlayerNotFoundException, PlayerExistsConflictException {
 
-		playerService.insert(player);
-		return new ResponseEntity<>(player, HttpStatus.CREATED);
+		final PlayerDTO playerAdded = playerService.insert(player);
+		return new ResponseEntity<>(playerAdded, HttpStatus.CREATED);
 	}
 
 	@ApiOperation(value = "Modificacion de un usuario a partir de una peticion Put.", notes = "Modificacion de un usuario en memoria.")
 	@ApiResponses({ @ApiResponse(code = 401, message = "No se encontro el resultado") })
 	@PutMapping(value = "/players/{id}")
 	public ResponseEntity<PlayerDTO> updateUser(
-			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) @PathVariable("id") long id,
-			@RequestBody PlayerDTO player) throws PlayerNotFoundException {
+			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) 
+			@PathVariable("id") long id,
+			@RequestBody PlayerDTO player) 
+					throws PlayerNotFoundException {
 
 		final PlayerDTO playerUpdated = playerService.update(id, player);
 		return new ResponseEntity<>(playerUpdated, HttpStatus.OK);
@@ -82,10 +88,13 @@ public class PlayerController {
 	@ApiOperation(value = "Eliminacion de un usuario a partir de una peticion Put.", notes = "Eliminacion de un usuario en memoria")
 	@ApiResponses({ @ApiResponse(code = 202, message = "Usuario no encontrado") })
 	@DeleteMapping(value = "/players/{id}")
-	public ResponseEntity<PlayerDTO> deleteUser(@PathVariable("id") long id) throws PlayerNotFoundException {
+	public ResponseEntity<?> deleteUser(
+			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) 
+			@PathVariable("id") long id) 
+					throws PlayerNotFoundException {
 
-		final PlayerDTO currentPlayer = playerService.delete(id);
-		return new ResponseEntity<>(currentPlayer, HttpStatus.ACCEPTED);
+		playerService.delete(id);
+		return new ResponseEntity<>(String.format("Eliminado el usuario con id %d", id), HttpStatus.OK);
 	}
 
 }

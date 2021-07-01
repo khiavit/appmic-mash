@@ -10,15 +10,15 @@ public interface IPlayerService {
 
 	PlayerDTO getPlayerById(final long id) throws PlayerNotFoundException;
 
-	PlayerDTO getPlayerWithNumber(final long number);
+	PlayerDTO getPlayerWithNumber(final long number) throws PlayerNotFoundException;
 
 	List<PlayerDTO> getPlayers();
 
-	void insert(final PlayerDTO player) throws PlayerExistsConflictException;
+	PlayerDTO insert(final PlayerDTO player) throws PlayerNotFoundException, PlayerExistsConflictException;
 
-	PlayerDTO update(final Long id, final PlayerDTO player);
+	PlayerDTO update(final Long id, final PlayerDTO player) throws PlayerNotFoundException;
 
-	PlayerDTO delete(final long id) throws PlayerNotFoundException;
+	void delete(final long id) throws PlayerNotFoundException;
 
 	boolean isUserExist(final long id);
 

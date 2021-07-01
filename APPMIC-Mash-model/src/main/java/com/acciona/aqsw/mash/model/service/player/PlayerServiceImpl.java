@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.acciona.aqsw.mash.api.dto.PlayerDTO;
@@ -67,11 +66,8 @@ public class PlayerServiceImpl implements IPlayerService {
 
 	@Override
 	public void delete(final long id) throws PlayerNotFoundException {
-		try {
-			playerRepository.deleteById(id);
-		} catch (EmptyResultDataAccessException e) {
-			throw new PlayerNotFoundException(String.format("No es posible eliminarlo. Usuario con id %d no encontrado", id));
-		}
+		getPlayerById(id);
+		playerRepository.deleteById(id);
 	}
 
 	@Override

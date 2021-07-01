@@ -73,7 +73,7 @@ public class PlayerController {
 	}
 
 	@ApiOperation(value = "Modificacion de un usuario a partir de una peticion Put.", notes = "Modificacion de un usuario en memoria.")
-	@ApiResponses({ @ApiResponse(code = 401, message = "No se encontro el resultado") })
+	@ApiResponses({ @ApiResponse(code = 404, message = "No se encontro el resultado") })
 	@PutMapping(value = "/players/{id}")
 	public ResponseEntity<PlayerDTO> updateUser(
 			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) 
@@ -86,7 +86,7 @@ public class PlayerController {
 	}
 
 	@ApiOperation(value = "Eliminacion de un usuario a partir de una peticion Put.", notes = "Eliminacion de un usuario en memoria")
-	@ApiResponses({ @ApiResponse(code = 202, message = "Usuario no encontrado") })
+	@ApiResponses({ @ApiResponse(code = 404, message = "Usuario no encontrado") })
 	@DeleteMapping(value = "/players/{id}")
 	public ResponseEntity<?> deleteUser(
 			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) 

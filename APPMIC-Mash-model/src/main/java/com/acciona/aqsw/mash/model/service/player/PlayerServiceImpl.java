@@ -1,6 +1,7 @@
 package com.acciona.aqsw.mash.model.service.player;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -34,9 +35,8 @@ public class PlayerServiceImpl implements IPlayerService {
 	}
 
 	@Override
-	public PlayerDTO getPlayerWithNumber(final long number) throws PlayerNotFoundException {
-		return playerMapper.playerToPlayerDto(playerRepository.findByNumber(number)
-				.orElseThrow(() -> new PlayerNotFoundException(String.format("Usuario con number %d no encontrado.", number))));
+	public Optional<PlayerDTO> getPlayerWithNumber(final long number) {
+		return playerRepository.findByNumber(number);
 	}
 
 	@Override
@@ -45,11 +45,11 @@ public class PlayerServiceImpl implements IPlayerService {
 	}
 
 	@Override
-	public PlayerDTO insert(final PlayerDTO player) throws PlayerNotFoundException, PlayerExistsConflictException {
-		try {
-			getPlayerWithNumber(player.getNumber());
-			throw new PlayerExistsConflictException(String.format("Imposible la creacion. El usuario con el nombre  %s, ya existe.", player.getName()));
-		} catch (PlayerNotFoundException e) {
+	public PlayerDTO insert(final PlayerDTO player) throws PlayerExistsConflictException {
+		if (getPlayerWithNumber(player.getNumber()).isPresent()) {
+			throw new PlayerExistsConflictException(
+					String.format("Imposible la creacion. El usuario con el nombre  %s, ya existe.", player.getName()));
+		} else {
 			final Player playerAdded = playerRepository.saveAndFlush(playerMapper.playerDtoToPlayer(player));
 			return playerMapper.playerToPlayerDto(playerAdded);
 		}
@@ -57,16 +57,22 @@ public class PlayerServiceImpl implements IPlayerService {
 
 	@Override
 	public PlayerDTO update(final Long id, final PlayerDTO player) throws PlayerNotFoundException {
-		getPlayerById(id);
-		player.setId(id);
-		final Player playerUpdated = playerRepository.saveAndFlush(playerMapper.playerDtoToPlayer(player));
-		return playerMapper.playerToPlayerDto(playerUpdated);
+		if (isUserExist(id)) {
+			player.setId(id);
+			final Player playerUpdated = playerRepository.saveAndFlush(playerMapper.playerDtoToPlayer(player));
+			return playerMapper.playerToPlayerDto(playerUpdated);
+		} else {
+			throw new PlayerNotFoundException(String.format("Usuario con id %d no encontrado.", id));
+		}
 	}
 
 	@Override
 	public void delete(final long id) throws PlayerNotFoundException {
-		getPlayerById(id);
-		playerRepository.deleteById(id);
+		if (isUserExist(id)) {
+			playerRepository.deleteById(id);
+		} else {
+			throw new PlayerNotFoundException(String.format("Usuario con id %d no encontrado.", id));
+		}
 	}
 
 	@Override

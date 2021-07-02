@@ -4,10 +4,11 @@ import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.acciona.aqsw.mash.api.dto.PlayerDTO;
 import com.acciona.aqsw.mash.model.domain.Player;
 
 public interface IPlayerRepository extends JpaRepository<Player, Long> {
 
-	Optional<Player> findByNumber(final long number);
+	Optional<PlayerDTO> findByNumber(final long number);
 
 }

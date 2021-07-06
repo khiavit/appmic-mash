@@ -1,7 +1,6 @@
 package com.acciona.aqsw.mash.model.service.player;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -35,8 +34,9 @@ public class PlayerServiceImpl implements IPlayerService {
 	}
 
 	@Override
-	public Optional<PlayerDTO> getPlayerWithNumber(final long number) {
-		return playerRepository.findByNumber(number);
+	public PlayerDTO getPlayerWithNumber(final long number) throws PlayerNotFoundException {
+		return playerMapper.playerToPlayerDto(playerRepository.findByNumber(number)
+				.orElseThrow(() -> new PlayerNotFoundException(String.format("Usuario con number %d no encontrado.", number))));
 	}
 
 	@Override
@@ -46,38 +46,43 @@ public class PlayerServiceImpl implements IPlayerService {
 
 	@Override
 	public PlayerDTO insert(final PlayerDTO player) throws PlayerExistsConflictException {
-		if (getPlayerWithNumber(player.getNumber()).isPresent()) {
-			throw new PlayerExistsConflictException(
-					String.format("Imposible la creacion. El usuario con el nombre  %s, ya existe.", player.getName()));
-		} else {
+		if (!isUserExistByNumber(player.getNumber())) {
 			final Player playerAdded = playerRepository.saveAndFlush(playerMapper.playerDtoToPlayer(player));
 			return playerMapper.playerToPlayerDto(playerAdded);
+		} else {
+			throw new PlayerExistsConflictException(
+					String.format("Imposible la creacion. El usuario con el nombre  %s, ya existe.", player.getName()));
 		}
 	}
 
 	@Override
-	public PlayerDTO update(final Long id, final PlayerDTO player) throws PlayerNotFoundException {
-		if (isUserExist(id)) {
-			player.setId(id);
+	public PlayerDTO update(final PlayerDTO player) throws PlayerNotFoundException {
+		if (isUserExistById(player.getId())) {
 			final Player playerUpdated = playerRepository.saveAndFlush(playerMapper.playerDtoToPlayer(player));
 			return playerMapper.playerToPlayerDto(playerUpdated);
 		} else {
-			throw new PlayerNotFoundException(String.format("Usuario con id %d no encontrado.", id));
+			throw new PlayerNotFoundException(String.format("Usuario con id %d no encontrado.", player.getId()));
 		}
 	}
 
 	@Override
-	public void delete(final long id) throws PlayerNotFoundException {
-		if (isUserExist(id)) {
+	public long delete(final long id) throws PlayerNotFoundException {
+		try {
 			playerRepository.deleteById(id);
-		} else {
+			return id;
+		} catch (Exception e) {
 			throw new PlayerNotFoundException(String.format("Usuario con id %d no encontrado.", id));
 		}
 	}
 
 	@Override
-	public boolean isUserExist(final long id) {
+	public boolean isUserExistById(final long id) {
 		return playerRepository.existsById(id);
+	}
+
+	@Override
+	public boolean isUserExistByNumber(final long number) {
+		return playerRepository.existsByNumber(number);
 	}
 
 }

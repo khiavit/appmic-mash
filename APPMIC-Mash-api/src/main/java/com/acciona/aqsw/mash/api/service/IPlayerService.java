@@ -1,7 +1,6 @@
 package com.acciona.aqsw.mash.api.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.acciona.aqsw.mash.api.dto.PlayerDTO;
 import com.acciona.aqsw.mash.api.exception.PlayerExistsConflictException;
@@ -11,16 +10,18 @@ public interface IPlayerService {
 
 	PlayerDTO getPlayerById(final long id) throws PlayerNotFoundException;
 
-	Optional<PlayerDTO> getPlayerWithNumber(final long number);
+	PlayerDTO getPlayerWithNumber(final long number) throws PlayerNotFoundException;
 
 	List<PlayerDTO> getPlayers();
 
 	PlayerDTO insert(final PlayerDTO player) throws PlayerExistsConflictException;
 
-	PlayerDTO update(final Long id, final PlayerDTO player) throws PlayerNotFoundException;
+	PlayerDTO update(final PlayerDTO player) throws PlayerNotFoundException;
 
-	void delete(final long id) throws PlayerNotFoundException;
+	long delete(final long id) throws PlayerNotFoundException;
 
-	boolean isUserExist(final long id);
+	boolean isUserExistById(final long id);
+
+	boolean isUserExistByNumber(final long number);
 
 }

@@ -65,8 +65,10 @@ public class PlayerController {
 	@ApiOperation(value = "Alta de un usuario a partir de un id.", notes = "Insercion de un usuario en memoria.")
 	@ApiResponses({ @ApiResponse(code = 409, message = "El usuario ya existe") })
 	@PostMapping(value = "/players")
-	public ResponseEntity<PlayerDTO> createUser(@RequestBody PlayerDTO player) 
-			throws PlayerNotFoundException, PlayerExistsConflictException {
+	public ResponseEntity<PlayerDTO> createUser(
+			@ApiParam(name = "player", type = "PlayerDTO", value = "Player's entity", required = true) 
+			@RequestBody PlayerDTO player) 
+			throws PlayerExistsConflictException {
 
 		final PlayerDTO playerAdded = playerService.insert(player);
 		return new ResponseEntity<>(playerAdded, HttpStatus.CREATED);
@@ -74,14 +76,13 @@ public class PlayerController {
 
 	@ApiOperation(value = "Modificacion de un usuario a partir de una peticion Put.", notes = "Modificacion de un usuario en memoria.")
 	@ApiResponses({ @ApiResponse(code = 404, message = "No se encontro el resultado") })
-	@PutMapping(value = "/players/{id}")
+	@PutMapping(value = "/players")
 	public ResponseEntity<PlayerDTO> updateUser(
-			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) 
-			@PathVariable("id") long id,
+			@ApiParam(name = "player", type = "PlayerDTO", value = "Player's entity", required = true) 
 			@RequestBody PlayerDTO player) 
 					throws PlayerNotFoundException {
 
-		final PlayerDTO playerUpdated = playerService.update(id, player);
+		final PlayerDTO playerUpdated = playerService.update(player);
 		return new ResponseEntity<>(playerUpdated, HttpStatus.OK);
 	}
 
@@ -93,8 +94,8 @@ public class PlayerController {
 			@PathVariable("id") long id) 
 					throws PlayerNotFoundException {
 
-		playerService.delete(id);
-		return new ResponseEntity<>(String.format("Eliminado el usuario con id %d", id), HttpStatus.OK);
+		final long idDeleted = playerService.delete(id);
+		return new ResponseEntity<>(String.format("Eliminado el usuario con id %d", idDeleted), HttpStatus.OK);
 	}
 
 }

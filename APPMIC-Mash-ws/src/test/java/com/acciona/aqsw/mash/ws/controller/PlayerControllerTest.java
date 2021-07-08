@@ -1,13 +1,14 @@
 package com.acciona.aqsw.mash.ws.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.acciona.aqsw.mash.api.dto.PlayerDTO;
+import com.acciona.aqsw.mash.api.exception.PlayerExistsConflictException;
 import com.acciona.aqsw.mash.api.service.IPlayerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -105,18 +107,56 @@ class PlayerControllerTest {
 	}
 
 	@Test
-	void testUpdateUser() {
-		fail("Not yet implemented");
+	void testCreateUserKO() throws Exception {
+		Mockito.doThrow(new PlayerExistsConflictException("Conflicto al crear el usuario")).when(playerService)
+				.insert(any());
+
+		mockMvc.perform(post("/api/v1/players").with(csrf()).header("Authorization", "Bearer ")
+				.content(om.writeValueAsString(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build()))
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isConflict())
+				.andExpect(content().string(containsString("Conflicto al crear el usuario")));
 	}
 
 	@Test
-	void testDeleteUser() {
-		fail("Not yet implemented");
+	void testUpdateUserOK() throws Exception {
+		Mockito.when(playerService.getPlayerById(1))
+				.thenReturn(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build());
+
+		mockMvc.perform(put("/api/v1/players", 1).with(csrf()).header("Authorization", "Bearer ")
+				.content(om.writeValueAsString(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build()))
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().string(containsString("Player 1")));
 	}
 
 	@Test
-	void testPlayerController() {
-		fail("Not yet implemented");
+	void testUpdateUserKO() throws Exception {
+		Mockito.when(playerService.getPlayerById(1)).thenReturn(null);
+
+		mockMvc.perform(put("/api/v1/players", 1).with(csrf()).header("Authorization", "Bearer ")
+				.content(om.writeValueAsString(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build()))
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print())
+				.andExpect(status().isInternalServerError())
+				.andExpect(content().string(containsString("Imposible actualizar. Usuario con id 1 no se encontro.")));
+	}
+
+	@Test
+	void testDeleteUserOK() throws Exception {
+		Mockito.when(playerService.getPlayerById(1))
+				.thenReturn(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build());
+
+		mockMvc.perform(delete("/api/v1/players/{id}", 1).with(csrf()).header("Authorization", "Bearer ")
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isAccepted())
+				.andExpect(content().string(containsString("Player 1")));
+	}
+
+	@Test
+	void testDeleteUserKO() throws Exception {
+		Mockito.when(playerService.getPlayerById(1)).thenReturn(null);
+
+		mockMvc.perform(delete("/api/v1/players/{id}", 1).with(csrf()).header("Authorization", "Bearer ")
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print())
+				.andExpect(status().isInternalServerError()).andExpect(
+						content().string(containsString("No es posible eliminarlo. Usuario con id 1 no encontrado.")));
 	}
 
 }

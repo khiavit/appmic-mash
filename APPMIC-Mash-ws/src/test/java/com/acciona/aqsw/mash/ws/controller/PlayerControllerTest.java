@@ -29,6 +29,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.acciona.aqsw.mash.api.dto.PlayerDTO;
 import com.acciona.aqsw.mash.api.exception.PlayerExistsConflictException;
+import com.acciona.aqsw.mash.api.exception.PlayerNotFoundException;
 import com.acciona.aqsw.mash.api.service.IPlayerService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -88,7 +89,9 @@ class PlayerControllerTest {
 
 	@Test
 	void testGetUserKO() throws Exception {
-		Mockito.when(playerService.getPlayerById(1L)).thenReturn(null);
+//		Mockito.when(playerService.getPlayerById(1L)).thenReturn(null);
+		Mockito.doThrow(new PlayerNotFoundException("Usuario con id 1 no encontrado"))
+				.when(playerService).getPlayerById(1L);
 
 		mockMvc.perform(get("/api/v1/players/{id}", 1L).with(csrf()).header("Authorization", "Bearer ")
 				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print())

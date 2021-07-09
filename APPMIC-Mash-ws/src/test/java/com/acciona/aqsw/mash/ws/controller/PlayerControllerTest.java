@@ -2,8 +2,7 @@ package com.acciona.aqsw.mash.ws.controller;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.acciona.aqsw.mash.ws.controller.handler.GlobalErrorHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,6 +25,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.acciona.aqsw.mash.api.dto.PlayerDTO;
@@ -46,7 +47,9 @@ class PlayerControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(new PlayerController(playerService)).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(new PlayerController(playerService))
+				            .setControllerAdvice(new GlobalErrorHandler()).
+		build();
 	}
 
 	@Test
@@ -89,24 +92,29 @@ class PlayerControllerTest {
 
 	@Test
 	void testGetUserKO() throws Exception {
-//		Mockito.when(playerService.getPlayerById(1L)).thenReturn(null);
-		Mockito.doThrow(new PlayerNotFoundException("Usuario con id 1 no encontrado"))
-				.when(playerService).getPlayerById(1L);
+		Mockito.when(playerService.getPlayerById(1L)).thenReturn(null);
 
 		mockMvc.perform(get("/api/v1/players/{id}", 1L).with(csrf()).header("Authorization", "Bearer ")
 				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print())
 				.andExpect(status().isInternalServerError())
-				.andExpect(content().string(containsString("Usuario con id 1 no encontrado")));
+				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON_UTF8));
+
+		//	.andExpect(content().string(containsString("Usuario con id 1 no encontrado")));
 	}
 
 	@Test
 	void testCreateUserOK() throws Exception {
-		mockMvc.perform(post("/api/v1/players").with(csrf()).header("Authorization", "Bearer ")
-				.content(om.writeValueAsString(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build()))
-				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isCreated())
-				.andExpect(content().string(containsString("Player 1")));
 
-		verify(playerService, times(1)).insert(any(PlayerDTO.class));
+		String json = om.writeValueAsString(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build());
+		var player = PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build();
+		when(playerService.insert(player)).thenReturn(player);
+
+		mockMvc.perform(post("/api/v1/players").with(csrf()).header("Authorization", "Bearer ")
+				.content(json)
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).
+				andDo(print()).
+				andExpect(status().isCreated())
+				.andExpect(content().string(containsString("Player 1")));
 	}
 
 	@Test
@@ -114,7 +122,7 @@ class PlayerControllerTest {
 		Mockito.doThrow(new PlayerExistsConflictException("Conflicto al crear el usuario")).when(playerService)
 				.insert(any());
 
-		mockMvc.perform(post("/api/v1/players").with(csrf()).header("Authorization", "Bearer ")
+			mockMvc.perform(post("/api/v1/players").with(csrf()).header("Authorization", "Bearer ")
 				.content(om.writeValueAsString(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build()))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isConflict())
 				.andExpect(content().string(containsString("Conflicto al crear el usuario")));
@@ -122,39 +130,44 @@ class PlayerControllerTest {
 
 	@Test
 	void testUpdateUserOK() throws Exception {
-		Mockito.when(playerService.getPlayerById(1))
-				.thenReturn(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build());
+
+		var player = PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build();
+		when(playerService.update(player))
+				.thenReturn(player);
 
 		mockMvc.perform(put("/api/v1/players", 1).with(csrf()).header("Authorization", "Bearer ")
-				.content(om.writeValueAsString(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build()))
+				.content(om.writeValueAsString(player))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().string(containsString("Player 1")));
 	}
 
 	@Test
 	void testUpdateUserKO() throws Exception {
-		Mockito.when(playerService.getPlayerById(1)).thenReturn(null);
+		var player = PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build();
+		when(playerService.update(player)).thenThrow(new PlayerNotFoundException());
 
 		mockMvc.perform(put("/api/v1/players", 1).with(csrf()).header("Authorization", "Bearer ")
-				.content(om.writeValueAsString(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build()))
+				.content(om.writeValueAsString(player))
 				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print())
 				.andExpect(status().isInternalServerError())
-				.andExpect(content().string(containsString("Imposible actualizar. Usuario con id 1 no se encontro.")));
+				.andExpect(content().string(containsString("PlayerNotFoundException")));
 	}
 
 	@Test
 	void testDeleteUserOK() throws Exception {
-		Mockito.when(playerService.getPlayerById(1))
-				.thenReturn(PlayerDTO.builder().id(1L).name("Player 1").age(11).number(1L).build());
+		Mockito.when(playerService.delete(1))
+				.thenReturn(1L);
 
 		mockMvc.perform(delete("/api/v1/players/{id}", 1).with(csrf()).header("Authorization", "Bearer ")
-				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print()).andExpect(status().isAccepted())
-				.andExpect(content().string(containsString("Player 1")));
+				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print())
+				.andExpect(status().is2xxSuccessful())
+				.andExpect(content().string(containsString("Eliminado el usuario con id 1")));
 	}
 
 	@Test
 	void testDeleteUserKO() throws Exception {
-		Mockito.when(playerService.getPlayerById(1)).thenReturn(null);
+
+		when(playerService.delete(1L)).thenThrow(new PlayerNotFoundException());
 
 		mockMvc.perform(delete("/api/v1/players/{id}", 1).with(csrf()).header("Authorization", "Bearer ")
 				.contentType(MediaType.APPLICATION_JSON_VALUE)).andDo(print())

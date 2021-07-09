@@ -58,7 +58,12 @@ public class PlayerController {
 			@PathVariable("id") long id)
 					throws PlayerNotFoundException {
 
-		final PlayerDTO player = playerService.getPlayerById(id);
+		PlayerDTO player = playerService.getPlayerById(id);
+
+		if (player == null) {
+			throw new PlayerNotFoundException("Usuario con id " + id + " no encontrado.");
+		}
+
 		return new ResponseEntity<>(player, HttpStatus.OK);
 	}
 
@@ -68,7 +73,7 @@ public class PlayerController {
 	public ResponseEntity<PlayerDTO> createUser(
 			@ApiParam(name = "player", type = "PlayerDTO", value = "Player's entity", required = true) 
 			@RequestBody PlayerDTO player) 
-			throws PlayerExistsConflictException {
+		 {
 
 		final PlayerDTO playerAdded = playerService.insert(player);
 		return new ResponseEntity<>(playerAdded, HttpStatus.CREATED);
@@ -91,8 +96,7 @@ public class PlayerController {
 	@DeleteMapping(value = "/players/{id}")
 	public ResponseEntity<?> deleteUser(
 			@ApiParam(name = "id", type = "Long", value = "Player's Id", example = "1", required = true) 
-			@PathVariable("id") long id) 
-					throws PlayerNotFoundException {
+			@PathVariable("id") long id) throws PlayerNotFoundException {
 
 		final long idDeleted = playerService.delete(id);
 		return new ResponseEntity<>(String.format("Eliminado el usuario con id %d", idDeleted), HttpStatus.OK);

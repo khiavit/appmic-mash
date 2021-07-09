@@ -1,6 +1,6 @@
 package com.acciona.aqsw.mash.api.exception;
 
-public class PlayerExistsConflictException extends EntityExistsConflictException {
+public class PlayerExistsConflictException extends RuntimeException {
 
 	/**
 	 * 

@@ -1,6 +1,6 @@
 package com.acciona.aqsw.mash.api.exception;
 
-public class PlayerNotFoundException extends EntityNotFoundException {
+public class PlayerNotFoundException extends RuntimeException {
 
 	/**
 	 * 

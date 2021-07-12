@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The Class PlayerDTO.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -26,6 +29,11 @@ public class PlayerDTO implements Serializable {
 
 	private Long number;
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		final StringBuilder strBldr = new StringBuilder(String.valueOf(number));

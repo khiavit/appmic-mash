@@ -34,13 +34,13 @@
         <dependency>
             <groupId>com.acciona.aqsw.mash</groupId>
             <artifactId>APPMIC-Mash-ws</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${ws.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.acciona.aqsw.mash</groupId>
             <artifactId>APPMIC-Mash-model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${model.version}</version>
             <scope>compile</scope>
         </dependency>
 

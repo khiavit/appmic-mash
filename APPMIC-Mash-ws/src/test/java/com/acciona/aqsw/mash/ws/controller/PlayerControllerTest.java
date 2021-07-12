@@ -38,14 +38,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest(classes = { IPlayerService.class })
 class PlayerControllerTest {
 
-	/** The player service. */
 	@MockBean
 	private IPlayerService playerService;
 
-	/** The mock mvc. */
 	private MockMvc mockMvc;
 
-	/** The om. */
 	protected static ObjectMapper om = new ObjectMapper();
 
 	/**

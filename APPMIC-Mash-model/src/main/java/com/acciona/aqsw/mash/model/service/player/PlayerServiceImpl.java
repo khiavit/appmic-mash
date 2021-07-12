@@ -26,10 +26,8 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class PlayerServiceImpl implements IPlayerService {
 
-	/** The player mapper. */
 	private final PlayerMapper playerMapper;
 
-	/** The player repository. */
 	private final IPlayerRepository playerRepository;
 
 	/**
@@ -54,8 +52,8 @@ public class PlayerServiceImpl implements IPlayerService {
 	 */
 	@Override
 	public PlayerDTO getPlayerWithNumber(final long number) throws PlayerNotFoundException {
-		return playerMapper.playerToPlayerDto(playerRepository.findByNumber(number)
-				.orElseThrow(() -> new PlayerNotFoundException(String.format("Usuario con number %d no encontrado.", number))));
+		return playerMapper.playerToPlayerDto(playerRepository.findByNumber(number).orElseThrow(
+				() -> new PlayerNotFoundException(String.format("Usuario con number %d no encontrado.", number))));
 	}
 
 	/**

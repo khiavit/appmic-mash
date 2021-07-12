@@ -10,6 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The Class Player.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,6 +34,11 @@ public class Player {
 	@Column(name = "NUMBER", nullable = false)
 	private Long number;
 
+	/**
+	 * To string.
+	 *
+	 * @return the string
+	 */
 	@Override
 	public String toString() {
 		final StringBuilder strBldr = new StringBuilder(String.valueOf(number));

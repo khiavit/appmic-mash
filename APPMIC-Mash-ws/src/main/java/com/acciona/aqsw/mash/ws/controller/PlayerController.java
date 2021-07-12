@@ -30,19 +30,10 @@ import lombok.extern.log4j.Log4j2;
 @RestController
 @RequestMapping(path = "/api/v1")
 @Api(value = "/api/v1", tags = "Operaciones con usuarios")
-
-/**
- * Instantiates a new player controller.
- *
- * @param playerService the player service
- */
 @RequiredArgsConstructor
-
-/** The Constant log. */
 @Log4j2
 public class PlayerController {
 
-	/** The player service. */
 	private final IPlayerService playerService;
 
 	/**

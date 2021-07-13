@@ -3,13 +3,13 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>APPMIC-Mash</artifactId>
+        <artifactId>APPMIC-MashVisit</artifactId>
         <groupId>com.acciona.aqsw.mash</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>APPMIC-Mash-boot</artifactId>
+    <artifactId>APPMIC-MashVisit-boot</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -39,7 +39,7 @@
         </dependency>
         <dependency>
             <groupId>com.acciona.aqsw.mash</groupId>
-            <artifactId>APPMIC-Mash-model</artifactId>
+            <artifactId>APPMIC-MashVisit-model</artifactId>
             <version>${model.version}</version>
             <scope>compile</scope>
         </dependency>

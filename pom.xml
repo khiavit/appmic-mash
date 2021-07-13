@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<modules>
-		<module>APPMIC-Mash-api</module>
-		<module>APPMIC-Mash-model</module>
-		<module>APPMIC-Mash-ws</module>
-		<module>APPMIC-Mash-boot</module>
+		<module>APPMIC-MashVisit-api</module>
+		<module>APPMIC-MashVisit-model</module>
+		<module>APPMIC-MashVisit-ws</module>
+		<module>APPMIC-MashVisit-boot</module>
 	</modules>
 
 	<parent>
@@ -19,9 +19,9 @@
 
 
 	<groupId>com.acciona.aqsw.mash</groupId>
-	<artifactId>APPMIC-Mash</artifactId>
+	<artifactId>APPMIC-MashVisit</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>APPMIC-Mash</name>
+	<name>APPMIC-MashVisit</name>
 
 	<properties>
 		<java.version>11</java.version>

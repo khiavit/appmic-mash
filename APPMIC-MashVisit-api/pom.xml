@@ -3,13 +3,13 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>APPMIC-MashVisit</artifactId>
+        <artifactId>APPMIC-Mash</artifactId>
         <groupId>com.acciona.aqsw.mash</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>APPMIC-MashVisit-api</artifactId>
+    <artifactId>APPMIC-Mash-api</artifactId>
     <dependencies>
 
 

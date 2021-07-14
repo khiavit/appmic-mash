@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<modules>
-		<module>APPMIC-Mash-api</module>
-		<module>APPMIC-Mash-model</module>
-		<module>APPMIC-Mash-ws</module>
-		<module>APPMIC-Mash-boot</module>
+		<module>APPMIC-NotificationMash-api</module>
+		<module>APPMIC-NotificationMash-model</module>
+		<module>APPMIC-NotificationMash-ws</module>
+		<module>APPMIC-NotificationMash-boot</module>
 	</modules>
 
 	<parent>
@@ -19,12 +19,12 @@
 
 
 	<groupId>com.acciona.aqsw.mash</groupId>
-	<artifactId>APPMIC-Mash</artifactId>
+	<artifactId>APPMIC-NotificationMash</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>APPMIC-Mash</name>
+	<name>APPMIC-NotificationMash</name>
 
 	<properties>
-		<java.version>11</java.version>
+		<java.version>8</java.version>
 		<swagger.version>2.9.2</swagger.version>
 		<swaggerui.version>2.9.2</swaggerui.version>
 		<lombok.version>1.18.12</lombok.version>

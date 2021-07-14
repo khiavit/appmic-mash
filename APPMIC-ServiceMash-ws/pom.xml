@@ -3,19 +3,19 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>APPMIC-NotificationMash</artifactId>
+        <artifactId>APPMIC-ServiceMash</artifactId>
         <groupId>com.acciona.aqsw.mash</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>APPMIC-NotificationMash-ws</artifactId>
+    <artifactId>APPMIC-ServiceMash-ws</artifactId>
 
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>APPMIC-NotificationMash-api</artifactId>
+            <artifactId>APPMIC-ServiceMash-api</artifactId>
             <version>${api.version}</version>
         </dependency>
 

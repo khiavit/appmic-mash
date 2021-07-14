@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<modules>
-		<module>APPMIC-NotificationMash-api</module>
-		<module>APPMIC-NotificationMash-model</module>
-		<module>APPMIC-NotificationMash-ws</module>
-		<module>APPMIC-NotificationMash-boot</module>
+		<module>APPMIC-ServiceMash-api</module>
+		<module>APPMIC-ServiceMash-model</module>
+		<module>APPMIC-ServiceMash-ws</module>
+		<module>APPMIC-ServiceMash-boot</module>
 	</modules>
 
 	<parent>
@@ -19,9 +19,9 @@
 
 
 	<groupId>com.acciona.aqsw.mash</groupId>
-	<artifactId>APPMIC-NotificationMash</artifactId>
+	<artifactId>APPMIC-ServiceMash</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>APPMIC-NotificationMash</name>
+	<name>APPMIC-ServiceMash</name>
 
 	<properties>
 		<java.version>8</java.version>

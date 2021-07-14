@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -34,12 +35,16 @@ public class GlobalErrorHandler {
 	@ExceptionHandler({PlayerExistsConflictException.class})
 	public ResponseEntity<Map<String, String>> handleElementNotFoundException(final HttpServletRequest request, final RuntimeException e) {
 
+
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-				.body(Map.of(METHOD, request.getMethod(),
-						URI, request.getRequestURI(),
-						MESSAGE, Objects.requireNonNull(e.getMessage()),
-						STATUS_CODE, HttpStatus.INTERNAL_SERVER_ERROR.toString()
-				));	}
+				.body(
+						new HashMap<String, String>() {{
+							put(METHOD, request.getMethod());
+							put(URI,request.getMethod());
+							put(MESSAGE,Objects.requireNonNull(e.getMessage()));
+							put(STATUS_CODE,HttpStatus.INTERNAL_SERVER_ERROR.toString());
+
+						}});	}
 
 	/**
 	 * Handle exists conflict exception.
@@ -52,10 +57,11 @@ public class GlobalErrorHandler {
 	public ResponseEntity<Map<String, String>> handleExistsConflictException(final HttpServletRequest request, final RuntimeException e) {
 
 		return ResponseEntity.status(HttpStatus.NO_CONTENT)
-				.body(Map.of(METHOD, request.getMethod(),
-						URI, request.getRequestURI(),
-						MESSAGE, Objects.requireNonNull(e.getMessage()),
-						STATUS_CODE, HttpStatus.NO_CONTENT.toString()
-				));	}
+				.body(new HashMap<String, String>() {{
+						put(METHOD , request.getMethod());
+						put(URI, request.getRequestURI());
+						put(MESSAGE, Objects.requireNonNull(e.getMessage()));
+						put(STATUS_CODE, HttpStatus.NO_CONTENT.toString());
+				}});}
 
 }

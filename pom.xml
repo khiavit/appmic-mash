@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
 	<modules>
-		<module>APPMIC-SpaceManagementMash-api</module>
-		<module>APPMIC-SpaceManagementMash-model</module>
-		<module>APPMIC-SpaceManagementMash-ws</module>
-		<module>APPMIC-SpaceManagementMash-boot</module>
+		<module>APPMIC-TransversalMash-api</module>
+		<module>APPMIC-TransversalMash-model</module>
+		<module>APPMIC-TransversalMash-ws</module>
+		<module>APPMIC-TransversalMash-boot</module>
 	</modules>
 
 	<parent>
@@ -19,9 +19,9 @@
 
 
 	<groupId>com.acciona.aqsw.mash</groupId>
-	<artifactId>APPMIC-SpaceManagementMash</artifactId>
+	<artifactId>APPMIC-TransversalMash</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>APPMIC-SpaceManagementMash</name>
+	<name>APPMIC-TransversalMash</name>
 
 	<properties>
 		<java.version>8</java.version>

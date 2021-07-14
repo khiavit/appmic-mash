@@ -3,13 +3,13 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>APPMIC-SpaceManagementMash</artifactId>
+        <artifactId>APPMIC-TransversalMash</artifactId>
         <groupId>com.acciona.aqsw.mash</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>APPMIC-SpaceManagementMash-boot</artifactId>
+    <artifactId>APPMIC-TransversalMash-boot</artifactId>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -33,13 +33,13 @@
         </dependency>
         <dependency>
             <groupId>com.acciona.aqsw.mash</groupId>
-            <artifactId>APPMIC-SpaceManagementMash-ws</artifactId>
+            <artifactId>APPMIC-TransversalMash-ws</artifactId>
             <version>${ws.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.acciona.aqsw.mash</groupId>
-            <artifactId>APPMIC-SpaceManagementMash-model</artifactId>
+            <artifactId>APPMIC-TransversalMash-model</artifactId>
             <version>${model.version}</version>
             <scope>compile</scope>
         </dependency>

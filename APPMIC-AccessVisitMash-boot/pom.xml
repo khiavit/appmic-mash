@@ -32,6 +32,18 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.acciona.aqsw.mash</groupId>
+            <artifactId>APPMIC-AccessVisitMash-ws</artifactId>
+            <version>${ws.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.acciona.aqsw.mash</groupId>
+            <artifactId>APPMIC-AccessVisitMash-model</artifactId>
+            <version>${model.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 
